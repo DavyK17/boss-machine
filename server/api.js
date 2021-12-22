@@ -15,57 +15,71 @@ const paramHandler = (req, res, next, id) => {
         req[`${model}`] = obj;
         if (req.method === "PUT" && Object.keys(req.query).length !== 0) req.query.id = req[`${model}`].id;
         return next();
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }
 
 // MINIONS
 apiRouter.route("/minions")
-.get((req, res, next) => {
-    return res.send(db.getAllFromDatabase("minions"));
-})
-.post((req, res, next) => {
-    const obj = db.addToDatabase("minions", req.query);
-    return res.status(201).send(obj)
-})
+    .get((req, res, next) => {
+        return res.send(db.getAllFromDatabase("minions"));
+    })
+    .post((req, res, next) => {
+        const obj = db.addToDatabase("minions", req.query);
+        return res.status(201).send(obj);
+    })
 
 apiRouter.param("minionId", paramHandler);
 apiRouter.route("/minions/:minionId")
-.get((req, res, next) => {
-    return res.send(req.minion);
-})
-.put((req, res, next) => {
-    const obj = db.updateInstanceInDatabase("minions", req.query)
-    return res.send(obj);
-})
-.delete((req, res, next) => {
-    db.deleteFromDatabasebyId("minions", req.minion.id)
-    return res.status(204).send();
-})
+    .get((req, res, next) => {
+        return res.send(req.minion);
+    })
+    .put((req, res, next) => {
+        const obj = db.updateInstanceInDatabase("minions", req.query);
+        return res.send(obj);
+    })
+    .delete((req, res, next) => {
+        db.deleteFromDatabasebyId("minions", req.minion.id);
+        return res.status(204).send();
+    })
 
 // IDEAS
 apiRouter.route("/ideas")
-.get((req, res, next) => {
-    return res.send(db.getAllFromDatabase("ideas"));
-})
-.post((req, res, next) => {
-    const obj = db.addToDatabase("ideas", req.query);
-    return res.status(201).send(obj)
-})
+    .get((req, res, next) => {
+        return res.send(db.getAllFromDatabase("ideas"));
+    })
+    .post((req, res, next) => {
+        const obj = db.addToDatabase("ideas", req.query);
+        return res.status(201).send(obj)
+    })
 
 apiRouter.param("ideaId", paramHandler);
 apiRouter.route("/ideas/:ideaId")
-.get((req, res, next) => {
-    return res.send(req.idea);
-})
-.put((req, res, next) => {
-    const obj = db.updateInstanceInDatabase("ideas", req.query)
-    return res.send(obj);
-})
-.delete((req, res, next) => {
-    db.deleteFromDatabasebyId("ideas", req.idea.id)
-    return res.status(204).send();
-})
+    .get((req, res, next) => {
+        return res.send(req.idea);
+    })
+    .put((req, res, next) => {
+        const obj = db.updateInstanceInDatabase("ideas", req.query);
+        return res.send(obj);
+    })
+    .delete((req, res, next) => {
+        db.deleteFromDatabasebyId("ideas", req.idea.id);
+        return res.status(204).send();
+    })
+
+// MEETINGS
+apiRouter.route("/meetings")
+    .get((req, res, next) => {
+        return res.send(db.getAllFromDatabase("meetings"));
+    })
+    .post((req, res, next) => {
+        const obj = db.createMeeting();
+        return res.status(201).send(obj);
+    })
+    .delete((req, res, next) => {
+        db.deleteAllFromDatabase("meetings");
+        return res.status(204).send();
+    })
 
 module.exports = apiRouter;
