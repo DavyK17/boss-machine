@@ -11,7 +11,7 @@ const {
 minionsRouter.param("minionId", (req, res, next, id) => {
     try {
         const obj = getFromDatabaseById("minions", id);
-        if (!obj) res.status(404).send("Minion not found!")
+        if (!obj) return res.status(404).send("Minion not found!")
 
         req.minion = obj;
         return next();
@@ -38,7 +38,7 @@ minionsRouter.route("/:minionId")
     })
     .delete((req, res, next) => {
         const deleted = deleteFromDatabasebyId("minions", req.params.minionId);
-        if (!deleted) res.status(500).send();
+        if (!deleted) return res.status(500).send();
         return res.status(204).send();
     })
 

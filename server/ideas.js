@@ -12,7 +12,7 @@ const {
 ideasRouter.param("ideaId", (req, res, next, id) => {
     try {
         const obj = getFromDatabaseById("ideas", id);
-        if (!obj) res.status(404).send("Idea not found!")
+        if (!obj) return res.status(404).send("Idea not found!")
 
         req.idea = obj;
         return next();
@@ -39,7 +39,7 @@ ideasRouter.route("/:ideaId")
     })
     .delete((req, res, next) => {
         const deleted = deleteFromDatabasebyId("ideas", req.params.ideaId);
-        if (!deleted) res.status(500).send();
+        if (!deleted) return res.status(500).send();
         return res.status(204).send();
     })
 
